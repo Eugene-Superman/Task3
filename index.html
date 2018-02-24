@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 3</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya|Pacifico|Questrial" rel="stylesheet"> 
+    <script src="js/script.js" defer></script>
+</head>
+<header>
+    <div class="header-top">
+        <div class="logo-div">
+            <img src="images/logo.png" alt="logo" class="logo">
+            <a href="#" class="name">
+                Barcelona
+            </a>
+        </div>
+        <div class="menu-div">
+            <ul class="header-menu">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Standings</a></li>
+                <li><a href="#">History</a></li>                    
+            </ul>
+        </div>
+           
+    </div>
+    <div class="image-container">
+        <img src="images/messi.jpg" alt="">
+    </div>   
+</header>
+<body>
+    <div class="container">
+        <div class="middle">
+            <div id="greetings-container">
+                <span id="greetings"></span>
+                <button id="log_out">Log out</button>
+            </div>
+            <div id="errorMessage"></div>
+            <div id="registration-container">
+                Registration
+                <br>
+                <input type="text" id="register_login" placeholder="Your e-mail">
+                <br>
+                <input type="password" id="register_password" placeholder="Your password">
+                <br>
+                <input type="password" id="register_confirmation" placeholder="Confirm your password">
+                <button type="submit" id="register">Register</button>
+            </div>
+            <div id="auth-container">
+                Authorization
+                <br>
+                <input type="text" id="auth_login" placeholder="Your e-mail">
+                <br>
+                <input type="password" id="auth_password" placeholder="Your password">
+                <br>
+                <button type="submit" id="auth">Log in</button>
+            </div>
+            <div class="content">
+                <h2>Philippe Coutinho Shows Liverpool What They’re Missing On His Barcelona Debut</h2>
+                <img src="images/coutinho.jpg" alt="coutinho">
+                <p>The former Liverpool playmaker joined Barca earlier this month but had been sidelined with a thigh injury up until this week, and as such was only named on the substitutes’ bench by manager Ernesto Valverde.</p>
+                <p>The Spanish league leaders were in Copa del Rey quarter-final action against local rivals Espanyol at Camp Nou, looking to overturn a 1-0 deficit from the first leg and book their place in the last four. They had achieved that within the first 25 minutes as goals from Luis Suarez and Lionel Messi sent them on their way to the semi-final.</p>
+                <p>Although Barca were technically always one goal away throughout from facing the same surprise fate as Real Madrid 24 hours earlier, the home side were comfortable enough to put Coutinho in with around 20 minutes remaining.</p>
+                <p>The 25-year-old was involved right from the get-go too, showing some flashes of magic and very nearly supplying ex-Liverpool teammate Suarez with an assist from a low ball into the box.</p>           
+                <p>Coutinho showed small signs of rust from the injury, but also that it will not take him long to get up to speed in his new surroundings, looking his usual classy self throughout. That he replaced Andres Iniesta is interesting too, as the general consensus is that he will be filling in for the Spanish legend in a number of La Liga fixtures to keep Iniesta fresh for the Champions League, a competition for which Coutinho is cup-tied.</p>
+                <p>Indeed, he may make his first start for the Blaugrana in this weekend’s league clash at home to Alaves.</p>
+            </div>
+            <div class="sidebar-div">          
+                <button id="burger">Slide</button>
+                <div id="sidebar">
+                    <div class="customization">
+                        <input id = 'fontSize' type="text" placeholder="Font size 8-24px">
+                        <button id = "getInput">Change</button>
+                    </div>
+                    <div class="customization">
+                        Background color:
+                        <select name="colorPicker" id="colorPicker">
+                            <option value="floralwhite">Floralwhite</option>  
+                            <option value="black">Black</option>
+                            <option value="white">White</option>
+                            <option value="red">Red</option>
+                            <option id="r" value="blue">Blue</option>
+                            <option value="orange">Orange</option>
+                            <option value="green">Green</option>         
+                        </select>
+                    </div>
+                    <div class="customization">
+                        <input name="textFont" type="radio" value="Alegreya" > Alegreya
+                        <input name="textFont" type="radio" value="Pacifico" > Pacifico
+                        <input name="textFont" type="radio" value="Questrial" > Questrial
+                        <br>
+                        <button id="selectFont">Select font</button> 
+                    </div>
+                    <button id="deleteLastP">Delete last p</button>
+                </div>
+            </div>
+        </div>
+    </div>     
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <script>
+
+        //Notification elements
+        var errorNotification = document.getElementById('errorMessage'),
+        greetingDiv = document.getElementById('greetings-container'),
+        greetingNotification = document.getElementById('greetings');
+
+        //Registration elements
+        var registerConteiner = document.getElementById('registration-container'),
+        registerLogin = document.getElementById('register_login'),
+        registerPassword = document.getElementById('register_password'),
+        confirmationPassword = document.getElementById('register_confirmation'),
+        registerButton = document.getElementById('register');
+
+        //Log in elements
+        var authConteiner = document.getElementById('auth-container'),
+        authLogin = document.getElementById('auth_login'),
+        authPassword = document.getElementById('auth_password'),
+        authButton = document.getElementById('auth');
+
+        var logOutButton = document.getElementById('log_out');
+
+         // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBIzTEO7x10IwEY2ntf5PZPwFrb9cV-KdA",
+            authDomain: "task3-1bb09.firebaseapp.com",
+            databaseURL: "https://task3-1bb09.firebaseio.com",
+            projectId: "task3-1bb09",
+            storageBucket: "task3-1bb09.appspot.com",
+            messagingSenderId: "1082794102443"
+        };
+        
+        firebase.initializeApp(config);
+
+        function logInUI() {
+            var storage = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyBIzTEO7x10IwEY2ntf5PZPwFrb9cV-KdA:[DEFAULT]'));
+            var userEmail = storage.email;
+            errorNotification.style.display = 'none';
+            authConteiner.style.display = 'none';
+            registerConteiner.style.display = 'none';
+            greetingDiv.style.display = 'block';
+            greetingNotification.innerHTML = "Hello, " + userEmail;
+            document.getElementById('burger').removeAttribute("disabled");
+            document.getElementById('getInput').removeAttribute("disabled");
+            document.getElementById('colorPicker').removeAttribute("disabled");
+            document.getElementById('selectFont').removeAttribute("disabled");
+            document.getElementById('deleteLastP').removeAttribute("disabled");
+        } 
+
+        function logOutUI() {
+            greetingDiv.style.display = 'none';
+            greetingNotification.innerHTML = "";
+            errorNotification.innerHTML = "";
+            errorNotification.style.display = 'block';
+            authConteiner.style.display = 'block';
+            registerConteiner.style.display = 'block';
+            document.getElementById('burger').setAttribute("disabled", "true");
+            document.getElementById('getInput').setAttribute("disabled", "true");
+            document.getElementById('colorPicker').setAttribute("disabled", "true");
+            document.getElementById('selectFont').setAttribute("disabled", "true");
+            document.getElementById('deleteLastP').setAttribute("disabled", "true");
+        } 
+
+        if (localStorage.length > 0) {
+            logInUI();
+        } else if (localStorage.length < 1) {
+            logOutUI();
+        }            
+
+        registerButton.addEventListener( 'click', function() {
+            if( registerPassword.value != '' && registerPassword.value === confirmationPassword.value ) {
+                firebase.auth().createUserWithEmailAndPassword(registerLogin.value, registerPassword.value).catch(function(error) {
+                var errorMessage = error.message;  
+                errorNotification.innerHTML = errorMessage;
+                });    
+            } else {
+                errorNotification.innerHTML = 'Password confirmation is failed';
+            }
+            var user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    logInUI();
+                } else {
+                    console.log('User is signed out');
+                }
+            });
+        } );
+
+        authButton.addEventListener( 'click', function() {
+            firebase.auth().signInWithEmailAndPassword(authLogin.value, authPassword.value).catch(function(error) {
+                var errorMessage = error.message;
+                errorNotification.innerHTML = errorMessage;
+                });
+
+            var user = firebase.auth().currentUser;
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    logInUI();
+                } else {
+                    console.log('User is signed out');
+                }
+            });
+        } )
+
+        logOutButton.addEventListener( 'click', function() {
+            firebase.auth().signOut().then(function() {
+                logOutUI();
+            }).catch(function(error) {
+                console.log('Error');
+            });
+        })
+
+    </script>
+<footer>
+    <div class="rights">Copyright © 2018 All Rights Reserved</div>
+    <div class="designed">Designed by Serbinyuk Eugene</div>
+</footer>
+</body>
+
+</html>
