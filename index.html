@@ -67,15 +67,15 @@
                 <p>Indeed, he may make his first start for the Blaugrana in this weekend’s league clash at home to Alaves.</p>
             </div>
             <div class="sidebar-div">          
-                <button id="burger">Slide</button>
+                <button class="sidebar_feature" id="burger">Slide</button>
                 <div id="sidebar">
                     <div class="customization">
-                        <input id = 'fontSize' type="text" placeholder="Font size 8-24px">
-                        <button id = "getInput">Change</button>
+                        <input class="sidebar_feature" id = 'fontSize' type="text" placeholder="Font size 8-24px">
+                        <button class="sidebar_feature" id = "getInput">Change</button>
                     </div>
                     <div class="customization">
                         Background color:
-                        <select name="colorPicker" id="colorPicker">
+                        <select class="sidebar_feature" name="colorPicker" id="colorPicker">
                             <option value="floralwhite">Floralwhite</option>  
                             <option value="black">Black</option>
                             <option value="white">White</option>
@@ -86,132 +86,19 @@
                         </select>
                     </div>
                     <div class="customization">
-                        <input name="textFont" type="radio" value="Alegreya" > Alegreya
-                        <input name="textFont" type="radio" value="Pacifico" > Pacifico
-                        <input name="textFont" type="radio" value="Questrial" > Questrial
+                        <input class="sidebar_feature" name="textFont" type="radio" value="Alegreya" > Alegreya
+                        <input class="sidebar_feature" name="textFont" type="radio" value="Pacifico" > Pacifico
+                        <input class="sidebar_feature" name="textFont" type="radio" value="Questrial" > Questrial
                         <br>
-                        <button id="selectFont">Select font</button> 
+                        <button class="sidebar_feature" id="selectFont">Select font</button> 
                     </div>
-                    <button id="deleteLastP">Delete last p</button>
+                    <button class="sidebar_feature" id="deleteLastP">Delete last p</button>
                 </div>
             </div>
         </div>
     </div>     
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-    <script>
-
-        //Notification elements
-        var errorNotification = document.getElementById('errorMessage'),
-        greetingDiv = document.getElementById('greetings-container'),
-        greetingNotification = document.getElementById('greetings');
-
-        //Registration elements
-        var registerConteiner = document.getElementById('registration-container'),
-        registerLogin = document.getElementById('register_login'),
-        registerPassword = document.getElementById('register_password'),
-        confirmationPassword = document.getElementById('register_confirmation'),
-        registerButton = document.getElementById('register');
-
-        //Log in elements
-        var authConteiner = document.getElementById('auth-container'),
-        authLogin = document.getElementById('auth_login'),
-        authPassword = document.getElementById('auth_password'),
-        authButton = document.getElementById('auth');
-
-        var logOutButton = document.getElementById('log_out');
-
-         // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyBIzTEO7x10IwEY2ntf5PZPwFrb9cV-KdA",
-            authDomain: "task3-1bb09.firebaseapp.com",
-            databaseURL: "https://task3-1bb09.firebaseio.com",
-            projectId: "task3-1bb09",
-            storageBucket: "task3-1bb09.appspot.com",
-            messagingSenderId: "1082794102443"
-        };
-        
-        firebase.initializeApp(config);
-
-        function logInUI() {
-            var storage = JSON.parse(localStorage.getItem('firebase:authUser:AIzaSyBIzTEO7x10IwEY2ntf5PZPwFrb9cV-KdA:[DEFAULT]'));
-            var userEmail = storage.email;
-            errorNotification.style.display = 'none';
-            authConteiner.style.display = 'none';
-            registerConteiner.style.display = 'none';
-            greetingDiv.style.display = 'block';
-            greetingNotification.innerHTML = "Hello, " + userEmail;
-            document.getElementById('burger').removeAttribute("disabled");
-            document.getElementById('getInput').removeAttribute("disabled");
-            document.getElementById('colorPicker').removeAttribute("disabled");
-            document.getElementById('selectFont').removeAttribute("disabled");
-            document.getElementById('deleteLastP').removeAttribute("disabled");
-        } 
-
-        function logOutUI() {
-            greetingDiv.style.display = 'none';
-            greetingNotification.innerHTML = "";
-            errorNotification.innerHTML = "";
-            errorNotification.style.display = 'block';
-            authConteiner.style.display = 'block';
-            registerConteiner.style.display = 'block';
-            document.getElementById('burger').setAttribute("disabled", "true");
-            document.getElementById('getInput').setAttribute("disabled", "true");
-            document.getElementById('colorPicker').setAttribute("disabled", "true");
-            document.getElementById('selectFont').setAttribute("disabled", "true");
-            document.getElementById('deleteLastP').setAttribute("disabled", "true");
-        } 
-
-        if (localStorage.length > 0) {
-            logInUI();
-        } else if (localStorage.length < 1) {
-            logOutUI();
-        }            
-
-        registerButton.addEventListener( 'click', function() {
-            if( registerPassword.value != '' && registerPassword.value === confirmationPassword.value ) {
-                firebase.auth().createUserWithEmailAndPassword(registerLogin.value, registerPassword.value).catch(function(error) {
-                var errorMessage = error.message;  
-                errorNotification.innerHTML = errorMessage;
-                });    
-            } else {
-                errorNotification.innerHTML = 'Password confirmation is failed';
-            }
-            var user = firebase.auth().currentUser;
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    logInUI();
-                } else {
-                    console.log('User is signed out');
-                }
-            });
-        } );
-
-        authButton.addEventListener( 'click', function() {
-            firebase.auth().signInWithEmailAndPassword(authLogin.value, authPassword.value).catch(function(error) {
-                var errorMessage = error.message;
-                errorNotification.innerHTML = errorMessage;
-                });
-
-            var user = firebase.auth().currentUser;
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    // User is signed in.
-                    logInUI();
-                } else {
-                    console.log('User is signed out');
-                }
-            });
-        } )
-
-        logOutButton.addEventListener( 'click', function() {
-            firebase.auth().signOut().then(function() {
-                logOutUI();
-            }).catch(function(error) {
-                console.log('Error');
-            });
-        })
-
-    </script>
+    <script src="js/authorization.js"></script>
 <footer>
     <div class="rights">Copyright © 2018 All Rights Reserved</div>
     <div class="designed">Designed by Serbinyuk Eugene</div>
